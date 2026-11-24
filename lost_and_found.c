@@ -114,6 +114,10 @@ static int ciCompare(const char *a, const char *b) {
 
 static int readLine(char *buf, int size) {
     if (!fgets(buf, size, stdin)) return 0;
+    if (strchr(buf, '\n') == NULL) {            /* line was longer than buffer: */
+        int ch;                                  /* discard the rest so it does  */
+        while ((ch = getchar()) != '\n' && ch != EOF) {}   /* not leak into the next prompt */
+    }
     buf[strcspn(buf, "\r\n")] = '\0';
     return 1;
 }
